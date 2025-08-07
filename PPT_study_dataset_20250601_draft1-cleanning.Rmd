@@ -66,7 +66,7 @@ data[] <- lapply(data, function(col) {
   return(col)
 })
 ```
-
+e
 ## 6. Convert Multi-select Columns to Numeric
 
 Multi-select variables are stored as character but should be treated numerically. We identify those columns using a regular expression and convert them to numeric.
