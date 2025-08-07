@@ -9,7 +9,7 @@ output: html_document
 
 When data is imported, character columns may be automatically converted to factors. Since factors can interfere with string manipulation, we convert them back to characters before further processing.
 
-```{r convert_factors, echo=TRUE}
+```         
 data[] <- lapply(data, function(col) {
   if (is.factor(col)) {
     col <- as.character(col)
@@ -22,7 +22,7 @@ data[] <- lapply(data, function(col) {
 
 After ensuring that factor columns are converted to characters, we process all character columns to enforce a consistent format. Specifically, we convert all text to lowercase and replace hyphens (`-`) with underscores (`_`).
 
-```{r standardize_characters, echo=TRUE}
+```         
 data[] <- lapply(data, function(col) {
   if (is.character(col)) {
     col <- tolower(col)
@@ -32,4 +32,49 @@ data[] <- lapply(data, function(col) {
 })
 ```
 
+## 3. Remove Columns with All Missing Values
 
+We remove any columns that contain only missing values.
+
+```         
+data <- data[, colSums(is.na(data)) < nrow(data)]
+```
+
+## 4. Clean Character Columns
+
+We first convert empty strings in character columns to NA to ensure proper missing value representation.
+
+```         
+data[] <- lapply(data, function(col) {
+  if (is.character(col)) {
+    col[col == ""] <- NA
+  }
+  return(col)
+})
+```
+
+## 5. Standardize Character Format
+
+Next, we trim leading/trailing white spaces and convert all character values to lowercase.
+
+```         
+data[] <- lapply(data, function(col) {
+  if (is.character(col)) {
+    col <- trimws(col)
+    col <- tolower(col)
+  }
+  return(col)
+})
+```
+
+## 6. Convert Multi-select Columns to Numeric
+
+Multi-select variables are stored as character but should be treated numerically. We identify those columns using a regular expression and convert them to numeric.
+
+```         
+multi_select_cols <- grep("where_healthsur_|receive_via_|motivate_healthsur_|stop_healthsur_", names(data), value = TRUE)
+
+data[multi_select_cols] <- lapply(data[multi_select_cols], function(col) {
+  as.numeric(col)
+})
+```
