@@ -37,15 +37,7 @@ data[] <- lapply(data, function(col) {
 })
 ```
 
-## 3. Remove Columns with All Missing Values
-
-We remove any columns that contain only missing values.
-
-```         
-data <- data[, colSums(is.na(data)) < nrow(data)]
-```
-
-## 4. Clean Character Columns
+## 3. Clean Character Columns
 
 We first convert empty strings in character columns to NA to ensure proper missing value representation.
 
@@ -58,7 +50,7 @@ data[] <- lapply(data, function(col) {
 })
 ```
 
-## 5. Standardize Character Format
+## 4. Standardize Character Format
 
 Next, we trim leading/trailing white spaces and convert all character values to lowercase.
 
@@ -72,7 +64,7 @@ data[] <- lapply(data, function(col) {
 })
 ```
 
-## 6.Convert Multi-select Columns to Numeric
+## 5.Convert Multi-select Columns to Numeric
 
 Multi-select variables are stored as character but should be treated numerically.
 We identify those columns using a regular expression and convert them to numeric.
@@ -85,7 +77,7 @@ data[multi_select_cols] <- lapply(data[multi_select_cols], function(col) {
 })
 ```
 
-## 7. Top 20 Variables with the Highest Missing Data Percentage
+## 6. Top 20 Variables with the Highest Missing Data Percentage
 
 To identify variables with significant missing data, we computed the percentage of missing values for each column in the dataset.
 Instead of visualizing all variables—which would make the chart too crowded—we focused on the top 20 variables with the highest proportion of missing values.
@@ -106,7 +98,7 @@ ggplot(top_miss, aes(x = reorder(variable, pct_miss), y = pct_miss)) +
   theme_minimal()
 ```
 
-## 8. PCA on Motivation for Health Surveillance
+## 7. PCA on Motivation for Health Surveillance
 
 We conducted a Principal Component Analysis (PCA) on a subset of variables related to motivations for participating in health surveillance.
 Specifically, we selected variables whose names begin with motivate_healthsur\_.
